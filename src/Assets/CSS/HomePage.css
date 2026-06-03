@@ -1,0 +1,399 @@
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.logo-img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Nav Bar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 64px;
+  border-bottom: 1px solid #e5e7eb;
+  
+  position: relative; 
+  background-color: white;
+  z-index: 1000; 
+  width: 100%;
+  transition: box-shadow 0.3s ease;
+}
+
+.navbar.fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 11000; 
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  width: 100%;
+}
+
+
+.menu-button,
+.nav-icons button {
+  font-size: 20px;
+  color: black;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+
+.nav-icons {
+  display: flex;
+  gap: 24px;
+}
+
+/* Side Bar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100%;
+  background-color: white;
+  box-shadow: 2px 0 6px rgba(0,0,0,0.1);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 12000; 
+}
+
+.sidebar.show {
+  transform: translateX(0);
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.sidebar-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+}
+
+.sidebar-close {
+  font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.sidebar-link {
+  font-size: 16px;
+  color: black;
+  text-decoration: none;
+}
+
+.sidebar-link:hover {
+  text-decoration: underline;
+}
+
+/*Hero Section*/
+.hero-section {
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.hero-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.hero-images img {
+  width: 100%;
+  height: 700px;
+  object-fit: cover;
+}
+
+.hero-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  max-width: 256px;
+  pointer-events: none;
+}
+
+.hero-text h2 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.03em;
+}
+
+.discount {
+  font-size: 48px;
+  font-weight: bold;
+  margin: -4px 0 8px;
+}
+
+.sale-dates {
+  font-size: 12px;
+  margin-top: 12px;
+}
+
+.btn-shop-now {
+  background-color: white;
+  color: black;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 24px;
+  border-radius: 2px;
+  transition: background-color 0.3s;
+}
+
+.btn-shop-now:hover {
+  background-color: #e5e5e5;
+}
+
+/*Content Section*/
+.content-section {
+  width: 100%;
+  margin: 40px 0;
+  padding: 0 64px;
+  box-sizing: border-box;
+}
+
+.content-wrapper {
+  display: flex;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.image-large {
+  flex: 0 0 auto;
+  width: 380px;
+}
+
+.image-large img {
+  width: 100%;
+  height: 606px;
+  object-fit: fill;
+  display: block;
+}
+
+.right-group {
+  display: flex;
+  flex: 2;
+  gap: 16px;
+}
+
+.image-stack {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 50%;
+  max-width: 320px;
+  gap: 5px;
+}
+
+.image-stack img {
+  width: 100%;
+  height: 301px;
+  object-fit: cover;
+  display: block;
+}
+
+.content-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  font-size: 16px;
+  font-weight: 600;
+  min-width: 0;
+  padding-bottom: 24px;
+}
+
+.content-text h3 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.content-text p {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+/*Our Style Section*/
+.our-style {
+  width: 100%;
+  margin-top: 40px;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.our-style h4 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.style-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.style-card {
+  background-color: white;
+  border: 1px solid #d1d5db;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.style-card img {
+  width: 100%;
+  object-fit: cover;
+  margin-bottom: 8px;
+}
+
+.style-card p {
+  font-size: 12px;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.card-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.btn-outline {
+  border: 1px solid #9ca3af;
+  font-size: 12px;
+  padding: 4px 12px;
+  transition: background-color 0.3s;
+}
+
+.btn-outline:hover {
+  background-color: #f3f4f6;
+}
+
+.btn-primary {
+  background-color: black;
+  color: white;
+  font-size: 12px;
+  padding: 4px 12px;
+  transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #1f2937;
+}
+
+/* Bottom Section*/
+.bottom-section {
+  width: 100%;
+  margin: 40px 0;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.bottom-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .bottom-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.bottom-card {
+  position: relative;
+}
+
+.bottom-card img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.overlay-text {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/*Respondivo*/
+@media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column;
+  }
+
+  .right-group {
+    flex-direction: column;
+  }
+
+  .image-stack {
+    flex-direction: row;
+    flex: 1;
+    max-width: none;
+  }
+
+  .image-stack img {
+    flex: 1;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .content-text {
+    padding-top: 16px;
+    padding-bottom: 0;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .content-text h3 {
+    font-size: 22px;
+  }
+
+  .content-text p {
+    font-size: 16px;
+  }
+
+  .image-large {
+    width: 100%;
+  }
+
+  .image-large img {
+    height: auto;
+    max-height: none;
+  }
+}
