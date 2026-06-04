@@ -11,6 +11,7 @@ const HomePage = () => {
 
   useEffect(() => {
     const navbar = navbarRef.current;
+    if (!navbar) return;
     const navbarOffsetTop = navbar.offsetTop;
 
     const handleScroll = () => {
@@ -88,6 +89,7 @@ const HomePage = () => {
         <div className="nav-icons">
           <button
             aria-label="Shopping cart"
+            className="icon-btn"
             onClick={(e) => {
               e.stopPropagation();
               setCartVisible((prev) => !prev);
@@ -98,6 +100,7 @@ const HomePage = () => {
           </button>
           <button
             aria-label="User account"
+            className="icon-btn"
             onClick={(e) => {
               e.stopPropagation();
               setLoginVisible((prev) => !prev);
@@ -109,16 +112,34 @@ const HomePage = () => {
         </div>
       </nav>
 
+      {/* Popups Overlays */}
+      {(cartVisible || loginVisible) && (
+        <div 
+          className="popup-overlay" 
+          onClick={() => { 
+            setCartVisible(false); 
+            setLoginVisible(false); 
+          }}
+        ></div>
+      )}
+
       {/* Cart Popup */}
       {cartVisible && (
         <div className="cart-popup" onClick={stopPropagation}>
+          <h3>Seu Carrinho</h3>
           <p>Faça login para ver os produtos adicionados ao carrinho.</p>
-          <button
-            className="cart-close"
-            onClick={() => setCartVisible(false)}
-          >
-            Fechar
-          </button>
+          <div className="popup-actions">
+            <button 
+              className="btn-primary" 
+              onClick={() => { 
+                setCartVisible(false); 
+                setLoginVisible(true); 
+              }}
+            >
+              Entrar agora
+            </button>
+            <button className="btn-link" onClick={() => setCartVisible(false)}>Fechar</button>
+          </div>
         </div>
       )}
 
@@ -136,10 +157,10 @@ const HomePage = () => {
           </div>
           <button className="login-submit">Entrar</button>
           <button
-            className="login-close"
+            className="login-close-text"
             onClick={() => setLoginVisible(false)}
           >
-            Fechar
+            Cancelar
           </button>
         </div>
       )}
@@ -155,7 +176,7 @@ const HomePage = () => {
           <div className="hero-text">
             <h2>MID SEASON SALE</h2>
             <p className="discount">-50%</p>
-            <p>On selected items</p>
+            <p className="hero-subtitle">On selected items</p>
             <button className="btn-shop-now">Shop now</button>
             <p className="sale-dates">From 26 February to 30 April</p>
           </div>
@@ -190,12 +211,14 @@ const HomePage = () => {
           <div className="style-grid">
             {["1", "2", "3", "4"].map((num) => (
               <div className="style-card" key={num}>
-                <img src={`/IMG/Our Style/Our Style ${num}.png`} alt={`Style ${num}`} />
-                <p>Lorem ipsum dolor sit amet</p>
-                <p>$15.00</p>
+                <div className="card-img-container">
+                  <img src={`/IMG/Our Style/Our Style ${num}.png`} alt={`Style ${num}`} />
+                </div>
+                <p className="product-title">Lorem ipsum dolor sit amet</p>
+                <p className="product-price">$15.00</p>
                 <div className="card-buttons">
-                  <button className="btn-outline">Add to Cart</button>
-                  <button className="btn-primary">Buy</button>
+                  <button className="btn-outline">+ Carrinho</button>
+                  <button className="btn-primary">Comprar</button>
                 </div>
               </div>
             ))}
