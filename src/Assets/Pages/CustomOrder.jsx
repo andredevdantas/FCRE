@@ -1,157 +1,91 @@
 import React, { useState } from "react";
 import "../Styles/Pages/CustomOrder.css";
+import Navbar from "../components/Navbar.jsx"; 
 
 const CustomOrder = () => {
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const [isCartOpen, setCartOpen] = useState(false);
-  const [isLoginOpen, setLoginOpen] = useState(false);
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [pieceDescription, setPieceDescription] = useState("");
   const [additionalNotes, setAdditionalNotes] = useState("");
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const closePopups = () => {
-    setCartOpen(false);
-    setLoginOpen(false);
-    setSidebarOpen(false);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     alert("Pedido enviado com sucesso!");
-    setName(""); setEmail(""); setPhone(""); setPieceDescription(""); setAdditionalNotes("");
-  };
-
-  const handleCloseLogin = () => {
-    setLoginOpen(false);
-    setUsername("");
-    setPassword("");
+    setName(""); 
+    setEmail(""); 
+    setPhone(""); 
+    setPieceDescription(""); 
+    setAdditionalNotes("");
   };
 
   return (
-    <div className="custom-container" onClick={closePopups}>
-      {/* Navbar */}
-      <nav className="navbar" onClick={(e) => e.stopPropagation()}>
-        <button className="menu-button" onClick={() => setSidebarOpen(true)}>
-          <i className="fas fa-bars"></i>
-        </button>
-        <div className="logo">Custom Order</div>
-        <div className="nav-icons">
-          <button onClick={(e) => { e.stopPropagation(); setCartOpen(!isCartOpen); setLoginOpen(false); }}>
-            <i className="fas fa-shopping-cart"></i>
-          </button>
-          <button onClick={(e) => { e.stopPropagation(); setLoginOpen(!isLoginOpen); setCartOpen(false); }}>
-            <i className="fas fa-user"></i>
-          </button>
-        </div>
-      </nav>
-
-      {/* Sidebar */}
-      <div
-        className={`sidebar ${isSidebarOpen ? "show" : ""}`}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="sidebar-header">
-          <span className="sidebar-title">Menu</span>
-          <button className="sidebar-close" onClick={() => setSidebarOpen(false)}>
-            <i className="fas fa-times"></i>
-          </button>
-        </div>
-        <nav className="sidebar-nav">
-          <a href="/" className="sidebar-link">Home</a>
-          <a href="/store" className="sidebar-link">Store</a>
-          <a href="/custom" className="sidebar-link">Custom Order</a>
-        </nav>
-      </div>
-
-      {/* Cart Popup */}
-      {isCartOpen && (
-        <div className="cart-popup" onClick={(e) => e.stopPropagation()}>
-          <p className="cart-text">Faça login para ver os produtos adicionados ao carrinho.</p>
-          <button className="cart-close" onClick={() => setCartOpen(false)}>Fechar</button>
-        </div>
-      )}
-
-      {/* Login Popup */}
-      {isLoginOpen && (
-        <div className="login-popup" onClick={(e) => e.stopPropagation()}>
-          <h2 className="login-title">Entrar na Conta</h2>
-          <div className="login-group">
-            <label>Usuário</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Digite seu usuário"
-            />
-          </div>
-          <div className="login-group">
-            <label>Senha</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Digite sua senha"
-            />
-          </div>
-          <button className="login-submit">Entrar</button>
-          <button onClick={handleCloseLogin} className="login-close">Fechar</button>
-        </div>
-      )}
-
-      {/* Conteúdo principal */}
-      <main className="custom-main" onClick={(e) => e.stopPropagation()}>
+    <div className="custom-container">
+      <Navbar />
+      <main className="custom-main">
         <h1 className="custom-title">Peça Personalizada</h1>
-        <p className="custom-description">Preencha o formulário abaixo com os detalhes do seu pedido personalizado.</p>
+        <p className="custom-description">
+          Preencha o formulário abaixo com os detalhes do seu pedido personalizado.
+        </p>
 
         <form onSubmit={handleSubmit} className="custom-form">
           <div className="form-group">
-            <label>Nome</label>
+            <label htmlFor="custom-name">Nome</label>
             <input
+              id="custom-name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              placeholder="Digite seu nome completo"
               required
             />
           </div>
+          
           <div className="form-group">
-            <label>Email</label>
+            <label htmlFor="custom-email">Email</label>
             <input
+              id="custom-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              placeholder="seuemail@exemplo.com"
               required
             />
           </div>
+          
           <div className="form-group">
-            <label>Telefone</label>
+            <label htmlFor="custom-phone">Telefone</label>
             <input
+              id="custom-phone"
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              placeholder="(00) 00000-0000"
               required
             />
           </div>
+          
           <div className="form-group">
-            <label>Descrição da Peça</label>
+            <label htmlFor="custom-desc">Descrição da Peça</label>
             <textarea
+              id="custom-desc"
               value={pieceDescription}
               onChange={(e) => setPieceDescription(e.target.value)}
+              placeholder="Descreva cores, tamanhos, tecidos ou ideias para sua peça..."
               required
             />
           </div>
+          
           <div className="form-group">
-            <label>Notas Adicionais</label>
+            <label htmlFor="custom-notes">Notas Adicionais</label>
             <textarea
+              id="custom-notes"
               value={additionalNotes}
               onChange={(e) => setAdditionalNotes(e.target.value)}
+              placeholder="Alguma observação extra?"
             />
           </div>
+          
           <button type="submit" className="custom-submit">Enviar Pedido</button>
         </form>
       </main>
