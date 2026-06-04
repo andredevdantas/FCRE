@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../CSS/CustomOrder.css";
+import "../Styles/Pages/CustomOrder.css";
 
 const CustomOrder = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);

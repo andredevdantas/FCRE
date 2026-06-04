@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import "../CSS/Store.css";
+import "../Styles/Pages/Store.css";
 
 const roupas = [
   { id: 1, nome: "Camiseta Oversized", preco: 89.9, imagem: "/IMG/Store/Oversized.jpeg" },
