@@ -1,12 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "../Styles/components/Navbar.css";
-import CartButton from "./CartButton.jsx";
+import CartButton from "./Modals/CartButton.jsx";
 import LoginButton from "./LoginButton.jsx";
-import CartPopup from "./CartPopup.jsx";
+import CartPopup from "./Modals/CartPopup.jsx";
 import LoginPopup from "./LoginPopup.jsx";
+import { useCart } from "../context/CartContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 
-const Navbar = ({ cartItems = [], removerDoCarrinho, totalCarrinho }) => {
+const Navbar = () => {
+  const { cart, removerDoCarrinho, totalCarrinho } = useCart();
+  const { user, logout } = useAuth(); 
   const sidebarRef = useRef(null);
   const navbarRef = useRef(null);
   const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -71,21 +75,30 @@ const Navbar = ({ cartItems = [], removerDoCarrinho, totalCarrinho }) => {
         </div>
         
         <div className="nav-icons">
+          {user && <span style={{ fontSize: '14px', marginRight: '8px', fontWeight: '500' }}>Olá, {user.nome}</span>}
+          
           <CartButton 
-            cartCount={cartItems.length} 
+            cartCount={cart.length} 
             onClick={(e) => {
               e.stopPropagation();
               setCartVisible(!cartVisible);
-              setLoginVisible(false); 
+              setLoginVisible(false);
             }} 
           />
-          <LoginButton 
-            onClick={(e) => {
-              e.stopPropagation();
-              setLoginVisible(!loginVisible);
-              setCartVisible(false); 
-            }} 
-          />
+
+          {user ? (
+            <button className="icon-btn" onClick={logout} title="Sair" aria-label="Sair da conta">
+              <i className="fas fa-sign-out-alt"></i>
+            </button>
+          ) : (
+            <LoginButton 
+              onClick={(e) => {
+                e.stopPropagation();
+                setLoginVisible(!loginVisible);
+                setCartVisible(false);
+              }} 
+            />
+          )}
         </div>
       </nav>
 
@@ -95,18 +108,18 @@ const Navbar = ({ cartItems = [], removerDoCarrinho, totalCarrinho }) => {
 
       {cartVisible && (
         <CartPopup 
-          cartItems={cartItems}
+          cartItems={cart}
           removerDoCarrinho={removerDoCarrinho}
           totalCarrinho={totalCarrinho}
           onClose={() => setCartVisible(false)}
           onOpenLogin={() => {
-            setCartVisible(false); 
-            setLoginVisible(true); 
+            setCartVisible(false);
+            setLoginVisible(true);
           }}
         />
       )}
 
-      {loginVisible && (
+      {loginVisible && !user && (
         <LoginPopup onClose={() => setLoginVisible(false)} />
       )}
     </>

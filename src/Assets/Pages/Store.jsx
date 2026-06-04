@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "../Styles/Pages/Store.css";
-import Navbar from "../components/Navbar.jsx"; 
+import Navbar from "../components/Navbar";
+import { useCart } from "../context/CartContext";
 
 const roupas = [
   { id: 1, nome: "Camiseta Oversized", preco: 89.9, imagem: "/IMG/Store/Oversized.jpeg" },
@@ -10,32 +11,11 @@ const roupas = [
 ];
 
 const Store = () => {
-  const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem("cart");
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
-
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
-
-  const adicionarAoCarrinho = (produto) => {
-    setCart((prev) => [...prev, produto]);
-  };
-
-  const removerDoCarrinho = (index) => {
-    setCart((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const totalCarrinho = cart.reduce((acc, item) => acc + item.preco, 0).toFixed(2);
+  const { adicionarAoCarrinho } = useCart();
 
   return (
     <div className="store-container">
-      <Navbar 
-        cartItems={cart} 
-        removerDoCarrinho={removerDoCarrinho} 
-        totalCarrinho={totalCarrinho} 
-      />
+      <Navbar />
 
       <main className="products-section">
         <h1 className="products-title">Loja de Roupas</h1>
