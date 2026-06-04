@@ -1,21 +1,29 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "../Styles/components/Navbar.css";
-import CartButton from "./Modals/CartButton.jsx";
+
+// Botões
+import CartButton from "./CartButton.jsx";
 import LoginButton from "./LoginButton.jsx";
+
+// Modais
 import CartPopup from "./Modals/CartPopup.jsx";
-import LoginPopup from "./LoginPopup.jsx";
+import LoginPopup from "./Modals/LoginPopup.jsx";
+import LogoutPopup from "./Modals/LogoutPopup.jsx"; 
+
+// Contextos Globais
 import { useCart } from "../context/CartContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 
 const Navbar = () => {
-  const { cart, removerDoCarrinho, totalCarrinho } = useCart();
+  const { cart, removerDoCarrinho, totalCarrinho, limparCarrinho } = useCart();
   const { user, logout } = useAuth(); 
   const sidebarRef = useRef(null);
   const navbarRef = useRef(null);
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [cartVisible, setCartVisible] = useState(false);
   const [loginVisible, setLoginVisible] = useState(false);
+  const [logoutVisible, setLogoutVisible] = useState(false);
 
   useEffect(() => {
     const navbar = navbarRef.current;
@@ -42,6 +50,7 @@ const Navbar = () => {
       setSidebarVisible(false);
       setCartVisible(false);
       setLoginVisible(false);
+      setLogoutVisible(false);
     };
     document.addEventListener("click", handleDocumentClick);
     return () => document.removeEventListener("click", handleDocumentClick);
@@ -83,11 +92,21 @@ const Navbar = () => {
               e.stopPropagation();
               setCartVisible(!cartVisible);
               setLoginVisible(false);
+              setLogoutVisible(false);
             }} 
           />
 
           {user ? (
-            <button className="icon-btn" onClick={logout} title="Sair" aria-label="Sair da conta">
+            <button 
+              className="icon-btn" 
+              onClick={(e) => {
+                e.stopPropagation();
+                setLogoutVisible(!logoutVisible);
+                setCartVisible(false);
+              }} 
+              title="Sair" 
+              aria-label="Sair da conta"
+            >
               <i className="fas fa-sign-out-alt"></i>
             </button>
           ) : (
@@ -102,8 +121,12 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {(cartVisible || loginVisible) && (
-        <div className="popup-overlay" onClick={() => { setCartVisible(false); setLoginVisible(false); }}></div>
+      {(cartVisible || loginVisible || logoutVisible) && (
+        <div className="popup-overlay" onClick={() => { 
+          setCartVisible(false); 
+          setLoginVisible(false); 
+          setLogoutVisible(false);
+        }}></div>
       )}
 
       {cartVisible && (
@@ -121,6 +144,17 @@ const Navbar = () => {
 
       {loginVisible && !user && (
         <LoginPopup onClose={() => setLoginVisible(false)} />
+      )}
+
+      {logoutVisible && user && (
+        <LogoutPopup 
+          onClose={() => setLogoutVisible(false)} 
+          onConfirm={() => {
+            logout();
+            limparCarrinho();    
+            setLogoutVisible(false); 
+          }} 
+        />
       )}
     </>
   );

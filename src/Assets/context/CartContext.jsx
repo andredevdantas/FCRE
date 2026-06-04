@@ -19,11 +19,15 @@ export const CartProvider = ({ children }) => {
   const removerDoCarrinho = (index) => {
     setCart((prev) => prev.filter((_, i) => i !== index));
   };
+  
+  const limparCarrinho = () => {
+    setCart([]);
+  };
 
   const totalCarrinho = cart.reduce((acc, item) => acc + item.preco, 0).toFixed(2);
 
   return (
-    <CartContext.Provider value={{ cart, adicionarAoCarrinho, removerDoCarrinho, totalCarrinho }}>
+    <CartContext.Provider value={{ cart, adicionarAoCarrinho, removerDoCarrinho, limparCarrinho, totalCarrinho }}>
       {children}
     </CartContext.Provider>
   );

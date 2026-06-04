@@ -2,6 +2,7 @@ import React from "react";
 import "../Styles/Pages/Store.css";
 import Navbar from "../components/Navbar";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 const roupas = [
   { id: 1, nome: "Camiseta Oversized", preco: 89.9, imagem: "/IMG/Store/Oversized.jpeg" },
@@ -12,6 +13,14 @@ const roupas = [
 
 const Store = () => {
   const { adicionarAoCarrinho } = useCart();
+  const { user } = useAuth(); 
+  const handleAdicionar = (produto) => {
+    if (!user) {
+      alert("Por favor, faça login para adicionar produtos ao seu carrinho!");
+      return; 
+    }
+    adicionarAoCarrinho(produto);
+  };
 
   return (
     <div className="store-container">
@@ -28,8 +37,9 @@ const Store = () => {
               </div>
               <h2>{produto.nome}</h2>
               <p>R$ {produto.preco.toFixed(2)}</p>
+              
               <button
-                onClick={() => adicionarAoCarrinho(produto)}
+                onClick={() => handleAdicionar(produto)}
                 className="product-add"
               >
                 Adicionar ao Carrinho

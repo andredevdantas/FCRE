@@ -1,8 +1,27 @@
 import React from "react";
 import "../Styles/Pages/HomePage.css"; 
-import Navbar from "../components/Navbar.jsx"; 
+import Navbar from "../components/Navbar"; 
+import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
+
+const produtosDestaque = [
+  { id: 101, nome: "Blazer Elegance", preco: 250.0, imagem: "/IMG/Our Style/Our Style 1.png" },
+  { id: 102, nome: "Camisa Minimalista", preco: 120.0, imagem: "/IMG/Our Style/Our Style 2.png" },
+  { id: 103, nome: "Calça Alfaiataria", preco: 180.0, imagem: "/IMG/Our Style/Our Style 3.png" },
+  { id: 104, nome: "Vestido Clássico", preco: 220.0, imagem: "/IMG/Our Style/Our Style 4.png" }
+];
 
 const HomePage = () => {
+  const { adicionarAoCarrinho } = useCart();
+  const { user } = useAuth();
+  const handleAdicionar = (produto) => {
+    if (!user) {
+      alert("Por favor, faça login para adicionar produtos ao seu carrinho!");
+      return; 
+    }
+    adicionarAoCarrinho(produto);
+  };
+
   return (
     <div className="homepage-container">
       <Navbar />
@@ -45,27 +64,30 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* Our Style*/}
+        {/* Our Style (Vitrine Dinâmica Interligada) */}
         <section className="our-style">
           <h4>Our Style</h4>
           <div className="style-grid">
-            {["1", "2", "3", "4"].map((num) => (
-              <div className="style-card" key={num}>
+            {produtosDestaque.map((produto) => (
+              <div className="style-card" key={produto.id}>
                 <div className="card-img-container">
-                  <img src={`/IMG/Our Style/Our Style ${num}.png`} alt={`Style ${num}`} />
+                  <img src={produto.imagem} alt={produto.nome} />
                 </div>
-                <p className="product-title">Lorem ipsum dolor sit amet</p>
-                <p className="product-price">$15.00</p>
+                <p className="product-title">{produto.nome}</p>
+                <p className="product-price">R$ {produto.preco.toFixed(2)}</p>
                 <div className="card-buttons">
-                  <button className="btn-outline">+ Carrinho</button>
-                  <button className="btn-primary-home">Comprar</button>
+                  <button 
+                    className="btn-primary-home"
+                    onClick={() => handleAdicionar(produto)}
+                  >
+                    Adicionar ao Carrinho
+                  </button>
                 </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Bottom Section*/}
         <section className="bottom-section">
           <div className="bottom-grid">
             {["DAY", "NIGHT", "ANYWHERE", "EVERYWHERE"].map((label) => (

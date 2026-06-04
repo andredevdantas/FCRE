@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 const LoginPopup = ({ onClose }) => {
   const { login } = useAuth(); 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  
   const handleSubmit = (e) => {
     e.preventDefault(); 
     if (username.trim() === "") return;
