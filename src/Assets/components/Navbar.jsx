@@ -1,6 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import "../Styles/components/Navbar.css"; 
+import "../Styles/components/Navbar.css";
+import CartButton from "./CartButton.jsx";
+import LoginButton from "./LoginButton.jsx";
+import CartPopup from "./CartPopup.jsx";
+import LoginPopup from "./LoginPopup.jsx";
 
 const Navbar = ({ cartItems = [], removerDoCarrinho, totalCarrinho }) => {
   const sidebarRef = useRef(null);
@@ -8,8 +12,6 @@ const Navbar = ({ cartItems = [], removerDoCarrinho, totalCarrinho }) => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [cartVisible, setCartVisible] = useState(false);
   const [loginVisible, setLoginVisible] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
 
   useEffect(() => {
     const navbar = navbarRef.current;
@@ -43,15 +45,8 @@ const Navbar = ({ cartItems = [], removerDoCarrinho, totalCarrinho }) => {
 
   const stopPropagation = (e) => e.stopPropagation();
 
-  const handleLoginClose = () => {
-    setLoginVisible(false);
-    setUsername("");
-    setPassword("");
-  };
-
   return (
     <>
-      {/* Sidebar */}
       <aside ref={sidebarRef} className={`sidebar ${sidebarVisible ? "show" : ""}`} onClick={stopPropagation}>
         <div className="sidebar-header">
           <span className="sidebar-title">Menu</span>
@@ -66,74 +61,53 @@ const Navbar = ({ cartItems = [], removerDoCarrinho, totalCarrinho }) => {
         </nav>
       </aside>
 
-      {/* Navbar Principal */}
       <nav ref={navbarRef} className="navbar" onClick={stopPropagation}>
         <button className="menu-button" onClick={(e) => { e.stopPropagation(); setSidebarVisible(true); }}>
           <i className="fas fa-bars"></i>
         </button>
+        
         <div className="logo">
           <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>FCER</Link>
         </div>
+        
         <div className="nav-icons">
-          <button className="icon-btn" onClick={(e) => { e.stopPropagation(); setCartVisible(!cartVisible); setLoginVisible(false); }}>
-            <i className="fas fa-shopping-cart"></i>
-            {cartItems.length > 0 && <span className="cart-count">({cartItems.length})</span>}
-          </button>
-          <button className="icon-btn" onClick={(e) => { e.stopPropagation(); setLoginVisible(!loginVisible); setCartVisible(false); }}>
-            <i className="fas fa-user"></i>
-          </button>
+          <CartButton 
+            cartCount={cartItems.length} 
+            onClick={(e) => {
+              e.stopPropagation();
+              setCartVisible(!cartVisible);
+              setLoginVisible(false); 
+            }} 
+          />
+          <LoginButton 
+            onClick={(e) => {
+              e.stopPropagation();
+              setLoginVisible(!loginVisible);
+              setCartVisible(false); 
+            }} 
+          />
         </div>
       </nav>
 
-      {/* Popups Overlays */}
       {(cartVisible || loginVisible) && (
         <div className="popup-overlay" onClick={() => { setCartVisible(false); setLoginVisible(false); }}></div>
       )}
 
-      {/* Cart Popup */}
       {cartVisible && (
-        <div className="cart-popup" onClick={stopPropagation}>
-          <h3>Seu Carrinho</h3>
-          {cartItems.length === 0 ? (
-            <>
-              <p>Faça login ou adicione produtos para ver seu carrinho.</p>
-              <div className="popup-actions">
-                <button className="btn-primary" onClick={() => { setCartVisible(false); setLoginVisible(true); }}>Entrar agora</button>
-                <button className="btn-link" onClick={() => setCartVisible(false)}>Fechar</button>
-              </div>
-            </>
-          ) : (
-            <ul className="cart-list">
-              {cartItems.map((item, index) => (
-                <li key={index} className="cart-item">
-                  <span>{item.nome}</span>
-                  <div className="cart-item-actions">
-                    <span>R$ {item.preco.toFixed(2)}</span>
-                    <button onClick={() => removerDoCarrinho(index)} className="cart-remove">Remover</button>
-                  </div>
-                </li>
-              ))}
-              <li className="cart-total">Total: R$ {totalCarrinho}</li>
-            </ul>
-          )}
-        </div>
+        <CartPopup 
+          cartItems={cartItems}
+          removerDoCarrinho={removerDoCarrinho}
+          totalCarrinho={totalCarrinho}
+          onClose={() => setCartVisible(false)}
+          onOpenLogin={() => {
+            setCartVisible(false); 
+            setLoginVisible(true); 
+          }}
+        />
       )}
 
-      {/* Login Popup */}
       {loginVisible && (
-        <div className="login-popup" onClick={stopPropagation}>
-          <h2>Entrar na Conta</h2>
-          <div className="login-group">
-            <label htmlFor="username">Usuário</label>
-            <input id="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Digite seu usuário" />
-          </div>
-          <div className="login-group">
-            <label htmlFor="password">Senha</label>
-            <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Digite sua senha" />
-          </div>
-          <button className="login-submit">Entrar</button>
-          <button className="login-close-text" onClick={handleLoginClose}>Cancelar</button>
-        </div>
+        <LoginPopup onClose={() => setLoginVisible(false)} />
       )}
     </>
   );
