@@ -1,25 +1,46 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../Styles/Pages/Store.css";
 import Navbar from "../components/Navbar";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 
-const roupas = [
-  { id: 1, nome: "Camiseta Oversized", preco: 89.9, imagem: "/IMG/Store/Oversized.jpeg" },
-  { id: 2, nome: "Jaqueta Jeans", preco: 199.9, imagem: "/IMG/Store/Jaqueta.jpg" },
-  { id: 3, nome: "Calça Cargo", preco: 149.9, imagem: "/IMG/Store/Cargo.jpeg" },
-  { id: 4, nome: "Moletom Canguru", preco: 129.9, imagem: "/IMG/Store/Moletom.png" },
-];
-
 const Store = () => {
   const { adicionarAoCarrinho } = useCart();
   const { user } = useAuth(); 
+
+  const [roupas, setRoupas] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("https://fakestoreapi.com/products")
+      .then((resposta) => resposta.json())
+      .then((dados) => {
+        const apenasRoupas = dados.filter(
+          (item) => item.category === "men's clothing" || item.category === "women's clothing"
+        );
+        setRoupas(apenasRoupas);
+        setLoading(false);
+      })
+      .catch((erro) => {
+        console.error(erro);
+        setLoading(false);
+      });
+  }, []);
+
   const handleAdicionar = (produto) => {
     if (!user) {
       alert("Por favor, faça login para adicionar produtos ao seu carrinho!");
       return; 
     }
-    adicionarAoCarrinho(produto);
+    
+    const produtoFormatado = {
+      id: produto.id,
+      nome: produto.title,
+      preco: produto.price * 5,
+      imagem: produto.image
+    };
+
+    adicionarAoCarrinho(produtoFormatado);
   };
 
   return (
@@ -29,24 +50,29 @@ const Store = () => {
       <main className="products-section">
         <h1 className="products-title">Loja de Roupas</h1>
         
-        <div className="products-grid">
-          {roupas.map((produto) => (
-            <div key={produto.id} className="product-card">
-              <div className="product-img-container">
-                <img src={produto.imagem} alt={produto.nome} />
+        {loading ? (
+          <div className="loading-container">
+            Carregando produtos da vitrine...
+          </div>
+        ) : (
+          <div className="products-grid">
+            {roupas.map((produto) => (
+              <div key={produto.id} className="product-card">
+                <div className="product-img-container">
+                  <img src={produto.image} alt={produto.title} />
+                </div>
+                <h2>{produto.title}</h2>
+                <p>R$ {(produto.price * 5).toFixed(2)}</p>
+                <button
+                  onClick={() => handleAdicionar(produto)}
+                  className="product-add"
+                >
+                  Adicionar ao Carrinho
+                </button>
               </div>
-              <h2>{produto.nome}</h2>
-              <p>R$ {produto.preco.toFixed(2)}</p>
-              
-              <button
-                onClick={() => handleAdicionar(produto)}
-                className="product-add"
-              >
-                Adicionar ao Carrinho
-              </button>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );
