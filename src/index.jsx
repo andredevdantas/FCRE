@@ -7,6 +7,7 @@ import './Assets/Styles/Pages/HomePage.css';
 import HomePage from './Assets/Pages/HomePage';
 import StorePage from './Assets/Pages/Store';
 import CustomOrderPage from './Assets/Pages/CustomOrder';
+import Coupons from "./Assets/Pages/Coupons";
 import Checkout from "./Assets/Pages/Checkout";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -20,6 +21,7 @@ root.render(
               <Route path="/" element={<HomePage />} />
               <Route path="/store" element={<StorePage />} />
               <Route path="/custom" element={<CustomOrderPage />} />
+              <Route path="/coupons" element={<Coupons />} />
               <Route path="/checkout" element={<Checkout />} />
             </Routes>
           </main>

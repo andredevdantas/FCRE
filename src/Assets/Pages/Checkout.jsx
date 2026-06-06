@@ -14,6 +14,14 @@ const Checkout = () => {
   const [metodoPagamento, setMetodoPagamento] = useState("cartao");
   const [isProcessing, setIsProcessing] = useState(false);
 
+  const [cupomInput, setCupomInput] = useState("");
+  const [cupomAplicado, setCupomAplicado] = useState(null);
+
+  const cuponsValidos = {
+    "BEMVINDO20": 0.20,
+    "FCER10": 0.10,
+  };
+
   const [dadosEntrega, setDadosEntrega] = useState({
     endereco: "",
     cidade: "",
@@ -27,39 +35,35 @@ const Checkout = () => {
     cvv: "",
   });
 
-  const aplicarMascaraCEP = (value) => {
-    return value
-      .replace(/\D/g, "")
-      .replace(/(\d{5})(\d)/, "$1-$2")
-      .substring(0, 9);
+  const aplicarMascaraCEP = (value) => value.replace(/\D/g, "").replace(/(\d{5})(\d)/, "$1-$2").substring(0, 9);
+  const aplicarMascaraCartao = (value) => value.replace(/\D/g, "").replace(/(\d{4})(\d)/g, "$1 ").trim().substring(0, 19);
+  const aplicarMascaraValidade = (value) => value.replace(/\D/g, "").replace(/(\d{2})(\d)/, "$1/$2").substring(0, 5);
+
+  const handleAplicarCupom = () => {
+    const codigo = cupomInput.toUpperCase().trim();
+    if (cuponsValidos[codigo]) {
+      setCupomAplicado({ codigo, desconto: cuponsValidos[codigo] });
+      setCupomInput("");
+    } else {
+      alert("Cupom inválido ou expirado.");
+    }
   };
 
-  const aplicarMascaraCartao = (value) => {
-    return value
-      .replace(/\D/g, "")
-      .replace(/(\d{4})(\d)/, "$1 $2")
-      .replace(/(\d{4})(\d)/, "$1 $2")
-      .replace(/(\d{4})(\d)/, "$1 $2")
-      .substring(0, 19);
+  const removerCupom = () => {
+    setCupomAplicado(null);
   };
 
-  const aplicarMascaraValidade = (value) => {
-    return value
-      .replace(/\D/g, "")
-      .replace(/(\d{2})(\d)/, "$1/$2")
-      .substring(0, 5);
-  };
+  const valorSubtotal = parseFloat(totalCarrinho) || 0;
+  const valorDescontoCupom = cupomAplicado ? valorSubtotal * cupomAplicado.desconto : 0;
+  const valorAposCupom = valorSubtotal - valorDescontoCupom;
+  const valorDescontoPix = metodoPagamento === "pix" ? valorAposCupom * 0.05 : 0;
+  const valorTotalFinal = valorAposCupom - valorDescontoPix;
 
   const handleFinalizarCompra = (e) => {
     e.preventDefault();
-
-    if (cart.length === 0) {
-      alert("Seu carrinho está vazio!");
-      return;
-    }
-
+    if (cart.length === 0) return alert("Seu carrinho está vazio!");
+    
     setIsProcessing(true);
-
     setTimeout(() => {
       setIsProcessing(false);
       alert(`Pagamento processado com sucesso! Obrigado pela compra, ${user?.nome || "Cliente"}.`);
@@ -73,7 +77,7 @@ const Checkout = () => {
       <Navbar />
 
       <div className="simulation-banner">
-        <i className="fas fa-info-circle"></i> Ambiente de Simulação Seguro. Nenhum dado real é armazenado ou processado.
+        <i className="fas fa-info-circle"></i> Ambiente de Simulação Seguro. Nenhum dado real é processado.
       </div>
 
       <main className="checkout-container">
@@ -82,9 +86,7 @@ const Checkout = () => {
         {cart.length === 0 ? (
           <div className="empty-checkout">
             <p>Seu carrinho está vazio.</p>
-            <button className="btn-voltar" onClick={() => navigate("/store")}>
-              Voltar para a Loja
-            </button>
+            <button className="btn-voltar" onClick={() => navigate("/store")}>Voltar para a Loja</button>
           </div>
         ) : (
           <div className="checkout-content">
@@ -94,57 +96,29 @@ const Checkout = () => {
                 
                 <section className="form-section">
                   <h2><i className="fas fa-map-marker-alt"></i> 1. Endereço de Entrega</h2>
-                  
                   <div className="input-row">
                     <div className="input-group cep-group">
                       <label>CEP</label>
-                      <input 
-                        type="text" 
-                        required 
-                        placeholder="00000-000"
-                        value={dadosEntrega.cep}
-                        onChange={(e) => setDadosEntrega({...dadosEntrega, cep: aplicarMascaraCEP(e.target.value)})}
-                      />
+                      <input type="text" required placeholder="00000-000" value={dadosEntrega.cep} onChange={(e) => setDadosEntrega({...dadosEntrega, cep: aplicarMascaraCEP(e.target.value)})} />
                     </div>
                     <div className="input-group cidade-group">
                       <label>Cidade</label>
-                      <input 
-                        type="text" 
-                        required 
-                        value={dadosEntrega.cidade}
-                        onChange={(e) => setDadosEntrega({...dadosEntrega, cidade: e.target.value})}
-                      />
+                      <input type="text" required value={dadosEntrega.cidade} onChange={(e) => setDadosEntrega({...dadosEntrega, cidade: e.target.value})} />
                     </div>
                   </div>
-
                   <div className="input-group">
                     <label>Endereço Completo</label>
-                    <input 
-                      type="text" 
-                      required 
-                      placeholder="Rua, Número, Complemento, Bairro"
-                      value={dadosEntrega.endereco}
-                      onChange={(e) => setDadosEntrega({...dadosEntrega, endereco: e.target.value})}
-                    />
+                    <input type="text" required placeholder="Rua, Número, Complemento" value={dadosEntrega.endereco} onChange={(e) => setDadosEntrega({...dadosEntrega, endereco: e.target.value})} />
                   </div>
                 </section>
 
                 <section className="form-section">
                   <h2><i className="fas fa-credit-card"></i> 2. Forma de Pagamento</h2>
-                  
                   <div className="payment-tabs">
-                    <button 
-                      type="button"
-                      className={`tab-btn ${metodoPagamento === "cartao" ? "active" : ""}`}
-                      onClick={() => setMetodoPagamento("cartao")}
-                    >
+                    <button type="button" className={`tab-btn ${metodoPagamento === "cartao" ? "active" : ""}`} onClick={() => setMetodoPagamento("cartao")}>
                       <i className="fas fa-credit-card"></i> Cartão de Crédito
                     </button>
-                    <button 
-                      type="button"
-                      className={`tab-btn ${metodoPagamento === "pix" ? "active" : ""}`}
-                      onClick={() => setMetodoPagamento("pix")}
-                    >
+                    <button type="button" className={`tab-btn ${metodoPagamento === "pix" ? "active" : ""}`} onClick={() => setMetodoPagamento("pix")}>
                       <i className="fab fa-pix"></i> Pix Dinâmico
                     </button>
                   </div>
@@ -154,86 +128,52 @@ const Checkout = () => {
                       <div className="input-group">
                         <label>Número do Cartão</label>
                         <div className="input-with-icon">
-                          <input 
-                            type="text" 
-                            required={metodoPagamento === "cartao"}
-                            placeholder="0000 0000 0000 0000"
-                            value={dadosPagamento.numeroCartao}
-                            onChange={(e) => setDadosPagamento({...dadosPagamento, numeroCartao: aplicarMascaraCartao(e.target.value)})}
-                          />
+                          <input type="text" required={metodoPagamento === "cartao"} placeholder="0000 0000 0000 0000" value={dadosPagamento.numeroCartao} onChange={(e) => setDadosPagamento({...dadosPagamento, numeroCartao: aplicarMascaraCartao(e.target.value)})} />
                           <i className="fas fa-lock card-input-lock"></i>
                         </div>
                       </div>
-
                       <div className="input-group">
-                        <label>Nome Impresso no Cartão</label>
-                        <input 
-                          type="text" 
-                          required={metodoPagamento === "cartao"}
-                          placeholder="JOÃO B SILVA"
-                          value={dadosPagamento.nomeCartao}
-                          onChange={(e) => setDadosPagamento({...dadosPagamento, nomeCartao: e.target.value.toUpperCase()})}
-                        />
+                        <label>Nome Impresso</label>
+                        <input type="text" required={metodoPagamento === "cartao"} placeholder="JOÃO B SILVA" value={dadosPagamento.nomeCartao} onChange={(e) => setDadosPagamento({...dadosPagamento, nomeCartao: e.target.value.toUpperCase()})} />
                       </div>
-
                       <div className="input-row">
                         <div className="input-group">
                           <label>Validade</label>
-                          <input 
-                            type="text" 
-                            required={metodoPagamento === "cartao"}
-                            placeholder="MM/AA"
-                            value={dadosPagamento.validade}
-                            onChange={(e) => setDadosPagamento({...dadosPagamento, validade: aplicarMascaraValidade(e.target.value)})}
-                          />
+                          <input type="text" required={metodoPagamento === "cartao"} placeholder="MM/AA" value={dadosPagamento.validade} onChange={(e) => setDadosPagamento({...dadosPagamento, validade: aplicarMascaraValidade(e.target.value)})} />
                         </div>
                         <div className="input-group">
                           <label>CVC / CVV</label>
-                          <input 
-                            type="text" 
-                            required={metodoPagamento === "cartao"}
-                            placeholder="123"
-                            maxLength="3"
-                            value={dadosPagamento.cvv}
-                            onChange={(e) => setDadosPagamento({...dadosPagamento, cvv: e.target.value.replace(/\D/g, "")})}
-                          />
+                          <input type="text" required={metodoPagamento === "cartao"} placeholder="123" maxLength="3" value={dadosPagamento.cvv} onChange={(e) => setDadosPagamento({...dadosPagamento, cvv: e.target.value.replace(/\D/g, "")})} />
                         </div>
                       </div>
                     </div>
                   ) : (
                     <div className="pix-instruction">
-                      <div className="pix-qr-mock">
-                        <i className="fas fa-qrcode"></i>
-                      </div>
-                      <p>O código QR Code dinâmico e a chave "Copia e Cola" serão gerados assim que você clicar em confirmar.</p>
-                      <span>Aprovação instantânea e 5% de desconto ativo.</span>
+                      <div className="pix-qr-mock"><i className="fas fa-qrcode"></i></div>
+                      <p>O QR Code será gerado após confirmar.</p>
+                      <span>Desconto de 5% aplicado no total.</span>
                     </div>
                   )}
                 </section>
 
                 <button type="submit" className="btn-confirmar" disabled={isProcessing}>
-                  {isProcessing ? (
-                    <span className="spinner-container">
-                      <i className="fas fa-circle-notch fa-spin"></i> Processando Transação Autenticada...
-                    </span>
-                  ) : (
-                    metodoPagamento === "cartao" ? "Autorizar Pagamento Seguro" : "Gerar Código Pix Seguro"
-                  )}
+                  {isProcessing ? <span><i className="fas fa-circle-notch fa-spin"></i> Processando...</span> : "Finalizar Pagamento Seguro"}
                 </button>
               </form>
 
+              {/* Os selos de segurança voltaram! */}
               <div className="security-badges-container">
                 <div className="badge-item">
                   <i className="fas fa-shield-alt"></i>
-                  <span>Ambiente Criptografado SSL</span>
+                  <span>Ambiente SSL</span>
                 </div>
                 <div className="badge-item">
                   <i className="fas fa-check-circle"></i>
-                  <span>PCI-DSS Compliant certified</span>
+                  <span>PCI-DSS Compliant</span>
                 </div>
                 <div className="badge-item">
                   <i className="fas fa-user-shield"></i>
-                  <span>Proteção Antifraude Ativa</span>
+                  <span>Antifraude Ativo</span>
                 </div>
               </div>
             </div>
@@ -251,29 +191,54 @@ const Checkout = () => {
                   </div>
                 ))}
               </div>
+
+              <div className="coupon-section">
+                <label>Possui Cupom?</label>
+                {!cupomAplicado ? (
+                  <div className="coupon-input-group">
+                    <input 
+                      type="text" 
+                      placeholder="Ex: FCER10" 
+                      value={cupomInput}
+                      onChange={(e) => setCupomInput(e.target.value)}
+                    />
+                    <button type="button" onClick={handleAplicarCupom}>Aplicar</button>
+                  </div>
+                ) : (
+                  <div className="coupon-active-box">
+                    <span><i className="fas fa-tag"></i> {cupomAplicado.codigo} ({(cupomAplicado.desconto * 100)}%)</span>
+                    <button type="button" onClick={removerCupom}>Remover</button>
+                  </div>
+                )}
+              </div>
               
               <div className="summary-totals">
                 <div className="totals-row">
                   <span>Subtotal</span>
-                  <span>R$ {totalCarrinho}</span>
+                  <span>R$ {valorSubtotal.toFixed(2)}</span>
                 </div>
                 <div className="totals-row">
                   <span>Frete Logístico</span>
                   <span className="free-shipping">Grátis</span>
                 </div>
+
+                {cupomAplicado && (
+                  <div className="totals-row coupon-discount-row">
+                    <span>Cupom ({cupomAplicado.codigo})</span>
+                    <span>- R$ {valorDescontoCupom.toFixed(2)}</span>
+                  </div>
+                )}
+
                 {metodoPagamento === "pix" && (
                   <div className="totals-row pix-discount-row">
                     <span>Desconto Pix (5%)</span>
-                    <span>- R$ {(parseFloat(totalCarrinho) * 0.05).toFixed(2)}</span>
+                    <span>- R$ {valorDescontoPix.toFixed(2)}</span>
                   </div>
                 )}
+                
                 <div className="totals-row total-final">
                   <span>Total a Pagar</span>
-                  <span>
-                    R$ {metodoPagamento === "pix" 
-                      ? (parseFloat(totalCarrinho) * 0.95).toFixed(2) 
-                      : totalCarrinho}
-                  </span>
+                  <span>R$ {valorTotalFinal.toFixed(2)}</span>
                 </div>
               </div>
             </aside>

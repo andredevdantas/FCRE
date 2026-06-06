@@ -71,6 +71,7 @@ const Navbar = () => {
           <Link to="/" className="sidebar-link" onClick={() => setSidebarVisible(false)}>Home</Link>
           <Link to="/store" className="sidebar-link" onClick={() => setSidebarVisible(false)}>Store</Link>
           <Link to="/custom" className="sidebar-link" onClick={() => setSidebarVisible(false)}>Custom Order</Link>
+          <Link to="/coupons" className="sidebar-link" onClick={() => setSidebarVisible(false)}>Cupons e Benefícios</Link>
         </nav>
       </aside>
 

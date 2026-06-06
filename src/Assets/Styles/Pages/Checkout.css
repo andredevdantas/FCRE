@@ -13,10 +13,6 @@
   font-size: 13px;
   font-weight: 500;
   border-bottom: 1px solid #bae6fd;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
 }
 
 .checkout-container {
@@ -50,7 +46,6 @@
   cursor: pointer;
   text-transform: uppercase;
   font-size: 13px;
-  letter-spacing: 1px;
   border-radius: 4px;
 }
 
@@ -87,9 +82,6 @@
   padding-bottom: 12px;
   border-bottom: 1px solid #f0f0f0;
   color: #222;
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 .input-group {
@@ -104,13 +96,8 @@
   gap: 16px;
 }
 
-.cep-group {
-  flex: 1;
-}
-
-.cidade-group {
-  flex: 2;
-}
+.cep-group { flex: 1; }
+.cidade-group { flex: 2; }
 
 .input-group label {
   font-family: 'Roboto', sans-serif;
@@ -118,7 +105,6 @@
   color: #666;
   margin-bottom: 6px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
   font-weight: 500;
 }
 
@@ -127,15 +113,13 @@
   border: 1px solid #dcdcdc;
   border-radius: 6px;
   font-size: 14px;
-  outline: none;
-  transition: all 0.2s ease;
   background-color: #fafafa;
+  outline: none;
 }
 
 .input-group input:focus {
   border-color: #000;
   background-color: #fff;
-  box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
 }
 
 .input-with-icon {
@@ -153,7 +137,6 @@
   position: absolute;
   right: 16px;
   color: #aaa;
-  font-size: 14px;
 }
 
 .payment-tabs {
@@ -169,15 +152,9 @@
   background-color: #fff;
   border-radius: 6px;
   cursor: pointer;
-  font-family: 'Roboto', sans-serif;
   font-size: 13px;
   font-weight: 500;
   color: #555;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: all 0.2s ease;
 }
 
 .tab-btn.active {
@@ -204,7 +181,6 @@
   font-size: 13px;
   color: #334155;
   margin: 0 0 8px 0;
-  line-height: 1.5;
 }
 
 .pix-instruction span {
@@ -222,13 +198,8 @@
   font-size: 15px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
   cursor: pointer;
   border-radius: 6px;
-  transition: background-color 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .btn-confirmar:hover:not(:disabled) {
@@ -238,12 +209,6 @@
 .btn-confirmar:disabled {
   background-color: #6ee7b7;
   cursor: not-allowed;
-}
-
-.spinner-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 .security-badges-container {
@@ -261,7 +226,6 @@
   gap: 8px;
   color: #666;
   font-size: 12px;
-  font-family: 'Roboto', sans-serif;
 }
 
 .badge-item i {
@@ -294,7 +258,6 @@
   margin-bottom: 24px;
   max-height: 240px;
   overflow-y: auto;
-  padding-right: 4px;
 }
 
 .summary-item {
@@ -319,7 +282,6 @@
   border: 1px solid #eee;
   border-radius: 6px;
   padding: 4px;
-  flex-shrink: 0;
 }
 
 .summary-item-name {
@@ -337,9 +299,83 @@
   margin-left: 12px;
 }
 
+.coupon-section {
+  margin-top: 24px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 16px;
+}
+
+.coupon-section label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+  text-transform: uppercase;
+}
+
+.coupon-input-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.coupon-input-group input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-transform: uppercase;
+  outline: none;
+}
+
+.coupon-input-group input:focus {
+  border-color: #111;
+}
+
+.coupon-input-group button {
+  padding: 0 16px;
+  background-color: #111;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.coupon-input-group button:hover {
+  background-color: #333;
+}
+
+.coupon-active-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ecfdf5;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 8px;
+  border: 1px solid #10b981;
+}
+
+.coupon-active-box span {
+  color: #059669;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.coupon-active-box button {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .summary-totals {
   border-top: 1px solid #f0f0f0;
   padding-top: 20px;
+  margin-top: 16px;
 }
 
 .totals-row {
@@ -352,6 +388,11 @@
 
 .free-shipping {
   color: #10b981;
+  font-weight: 500;
+}
+
+.coupon-discount-row {
+  color: #059669;
   font-weight: 500;
 }
 
@@ -381,6 +422,5 @@
   }
   .security-badges-container {
     flex-direction: column;
-    gap: 12px;
   }
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../Styles/Pages/HomePage.css"; 
 import Navbar from "../components/Navbar"; 
 import { useCart } from "../context/CartContext";
@@ -12,8 +13,10 @@ const produtosDestaque = [
 ];
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const { adicionarAoCarrinho } = useCart();
   const { user } = useAuth();
+
   const handleAdicionar = (produto) => {
     if (!user) {
       alert("Por favor, faça login para adicionar produtos ao seu carrinho!");
@@ -36,7 +39,7 @@ const HomePage = () => {
             <h2>MID SEASON SALE</h2>
             <p className="discount">-50%</p>
             <p className="hero-subtitle">On selected items</p>
-            <button className="btn-shop-now">Shop now</button>
+            <button className="btn-shop-now" onClick={() => navigate("/store")}>Shop now</button>
             <p className="sale-dates">From 26 February to 30 April</p>
           </div>
         </section>
@@ -64,7 +67,7 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* Our Style (Vitrine Dinâmica Interligada) */}
+        {/* Our Style */}
         <section className="our-style">
           <h4>Our Style</h4>
           <div className="style-grid">
