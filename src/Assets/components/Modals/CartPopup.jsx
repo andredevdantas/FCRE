@@ -1,6 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const CartPopup = ({ cartItems, removerDoCarrinho, totalCarrinho, onOpenLogin, onClose }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="cart-popup" onClick={(e) => e.stopPropagation()}>
       <h3>Seu Carrinho</h3>
@@ -29,8 +32,20 @@ const CartPopup = ({ cartItems, removerDoCarrinho, totalCarrinho, onOpenLogin, o
             </li>
           ))}
           <li className="cart-total">Total: R$ {totalCarrinho}</li>
-          <button className="btn-link" style={{ width: '100%', marginTop: '12px' }} onClick={onClose}>
-            Fechar Carrinho
+          
+          <button 
+            className="btn-primary" 
+            style={{ width: '100%', marginTop: '16px' }} 
+            onClick={() => {
+              onClose();
+              navigate("/checkout");
+            }}
+          >
+            Finalizar Compra
+          </button>
+          
+          <button className="btn-link" style={{ width: '100%', marginTop: '8px' }} onClick={onClose}>
+            Continuar Comprando
           </button>
         </ul>
       )}
