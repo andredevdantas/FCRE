@@ -1,8 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext"; 
 
 const CartPopup = ({ cartItems, removerDoCarrinho, totalCarrinho, onOpenLogin, onClose }) => {
   const navigate = useNavigate();
+  const { user } = useAuth(); 
 
   return (
     <div className="cart-popup" onClick={(e) => e.stopPropagation()}>
@@ -10,13 +12,35 @@ const CartPopup = ({ cartItems, removerDoCarrinho, totalCarrinho, onOpenLogin, o
       
       {cartItems.length === 0 ? (
         <>
-          <p>Faça login ou adicione produtos para ver seu carrinho.</p>
-          <div className="popup-actions">
-            <button className="btn-primary" onClick={onOpenLogin}>
-              Entrar agora
-            </button>
-            <button className="btn-link" onClick={onClose}>Fechar</button>
-          </div>
+          {!user ? (
+            <>
+              <p>Faça login ou adicione produtos para ver seu carrinho.</p>
+              <div className="popup-actions" style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '16px' }}>
+                <button className="btn-primary" onClick={onOpenLogin}>
+                  Entrar agora
+                </button>
+                <button className="btn-link" onClick={onClose}>Fechar</button>
+              </div>
+            </>
+          ) : (
+            <>
+              <p style={{ margin: '16px 0', color: '#555' }}>
+                Seu carrinho está vazio, {user.nome}! Que tal dar uma olhada nas novidades da loja?
+              </p>
+              <div className="popup-actions" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <button 
+                  className="btn-primary" 
+                  onClick={() => {
+                    onClose();
+                    navigate("/store");
+                  }}
+                >
+                  Ir para a Loja
+                </button>
+                <button className="btn-link" onClick={onClose}>Fechar</button>
+              </div>
+            </>
+          )}
         </>
       ) : (
         <ul className="cart-list">
@@ -37,8 +61,8 @@ const CartPopup = ({ cartItems, removerDoCarrinho, totalCarrinho, onOpenLogin, o
             className="btn-primary" 
             style={{ width: '100%', marginTop: '16px' }} 
             onClick={() => {
-              onClose();
-              navigate("/checkout");
+              onClose(); 
+              navigate("/checkout"); 
             }}
           >
             Finalizar Compra
