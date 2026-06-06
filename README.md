@@ -1,70 +1,64 @@
-# Getting Started with Create React App
+# 🛍️ FCER - E-Commerce Premium
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> Uma aplicação front-end de e-commerce de moda focada em UX/UI de alto padrão, integração com APIs reais e gerenciamento avançado de estados com React.
 
-## Available Scripts
+![Status do Projeto](https://img.shields.io/badge/Status-Em_Desenvolvimento-success)
+![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
+![React Router](https://img.shields.io/badge/React_Router-CA4245?style=flat&logo=react-router&logoColor=white)
 
-In the project directory, you can run:
+## 📌 Sobre o Projeto
+O **FCER** é uma simulação completa de uma loja virtual boutique. O foco principal deste projeto é demonstrar as melhores práticas de arquitetura front-end, consumo de APIs RESTful assíncronas e a criação de uma jornada de compra fluida e segura para o usuário (UX/UI), desde a vitrine até o checkout.
 
-### `npm start`
+## 🚀 Funcionalidades Implementadas
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 🌐 Vitrine e Navegação
+- **Home Page Dinâmica:** Layout responsivo focado na conversão, com destaques estilizados e design premium de alto contraste.
+- **Integração com API Externa:** A página "Store" consome dados reais (produtos, imagens e preços) vindos da `Fake Store API`.
+- **Filtros e Tratamento de Dados:** Adaptação do JSON da API para exibir apenas roupas, formatando e convertendo preços dinamicamente para Real (BRL).
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 🛒 Carrinho e Gerenciamento de Estado
+- **Context API Global:** Uso avançado de Context API (`CartContext` e `AuthContext`) para gerenciar compras e sessão do usuário em toda a aplicação.
+- **Persistência de Dados:** Uso do `localStorage` para garantir que o carrinho e o login não sejam perdidos ao recarregar a página.
+- **Sincronização de Sessão:** O carrinho é automaticamente esvaziado ao realizar o Logout, evitando armazenamento de dados fantasmas.
 
-### `npm test`
+### 🔒 Autenticação e UX
+- **Modais Inteligentes:** Popups customizados para Login, Logout e visualização rápida do Carrinho sem necessidade de recarregar a página.
+- **Proteção de Ações:** Sistema de validação que exige login ativo para permitir a adição de produtos ao carrinho.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 💳 Checkout
+- **Máscaras Dinâmicas (Input Masking):** Formatação automática de CEP, Número do Cartão e Data de Validade via expressões regulares (RegEx).
+- **Simulação de Gateway:** Botões com estado dinâmico de `Loading` e temporizadores simulando a verificação de operadoras de crédito.
+- **Cálculo em Tempo Real:** Múltiplos métodos de pagamento, incluindo aba Pix com aplicação de 5% de desconto imediato no resumo da compra.
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🛠️ Tecnologias Utilizadas
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **React.js** (Componentização, Hooks: `useState`, `useEffect`, `useContext`)
+- **React Router DOM** (Navegação Single Page Application)
+- **CSS3** (Estilização pura com foco em Flexbox, Grid e UI Premium)
+- **Fake Store API** (Mock de dados e consumo via `fetch`)
+- **FontAwesome** (Ícones SVG e badges de segurança)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
+## 💻 Como rodar o projeto localmente
 
-### `npm run eject`
+```bash
+1. Clone este repositório:
+   git clone [https://github.com/andredevdantas/FCRE.git](https://github.com/andredevdantas/FCRE.git)
+   
+2. Acesse a pasta do projeto:
+   cd FCRE
+   
+3. Instale as dependências:
+   npm install
+   
+4. Inicie o servidor de desenvolvimento:
+   npm start
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+   
+A aplicação será aberta automaticamente no seu navegador padrão em http://localhost:3000.
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 👨‍💻 Autor
+Desenvolvido por André Luis.
